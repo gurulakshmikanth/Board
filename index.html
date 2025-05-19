@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Job Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .job-list {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .job-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+    transition: transform 0.2s;
+  }
+
+  .job-card:hover {
+    transform: scale(1.01);
+  }
+
+  .job-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-right: 20px;
+  }
+
+  .job-details {
+    flex: 1;
+  }
+
+  .job-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .job-title:hover {
+    text-decoration: underline;
+  }
+
+  .meta {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #333;
+  }
+
+  .apply-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .apply-btn:hover {
+    background-color: #218838;
+  }
+</style>
+
+</head>
+<body>
+
+<h2 style="text-align: center;">🔥 Latest Job Openings</h2>
+  <div class="container">
+    <div id="job-list" class="job-list"></div>
+  </div>
+<script>
+  fetch("https://script.google.com/macros/s/AKfycbw_sl2uTyQdBuJf0zSoCjKVcawC0TZNNJXge_ZmaCGn-c9BYA76g-xDuPLLepK4cq1D/exec")
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('job-list');
+
+      // 1. Reverse the order: latest jobs first
+      const jobs = data.reverse();
+
+      jobs.forEach(job => {
+        // 2. Use fallback values if fields are missing (prevent "undefined")
+        const title = job.Title || "Untitled";
+        const url = job.Url || "#";
+        const company = job.Company || "Unknown Company";
+        const location = job.Location || "Not mentioned";
+        const type = job.Type || "N/A";
+        const pack = job.Package || "N/A";
+        const image = job.Picture || "https://via.placeholder.com/80";
+
+        const card = document.createElement('div');
+        card.className = 'job-card';
+
+        card.innerHTML = `
+          <img src="${image}" alt="${company} Logo">
+          <div class="job-details">
+            <div class="meta"><strong>Company:</strong> ${title}</div>
+            <div class="meta"><strong>Company:</strong> ${company}</div>
+            <div class="meta"><strong>Location:</strong> ${location}</div>
+            <div class="meta"><strong>Type:</strong> ${type}</div>
+            <div class="meta"><strong>Package:</strong> ${pack}</div>
+            <a class="apply-btn" href="${url}" target="_blank">Apply Now</a>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    })
+    .catch(error => {
+      document.getElementById("job-list").innerHTML = "<p>Error loading jobs.</p>";
+      console.error(error);
+    });
+</script>
+
+</body>
+</html>
